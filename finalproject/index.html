@@ -4,13 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1">
 
-    <title>Hello World</title>
-
-    <style>
-      body {
-        border: 1px solid black;
-      }
-    </style>
+    <title>DrawingApp</title>
+    <link rel="stylesheet" type="text/css" href="main.css" />
 
     <!-- Inline scripts are forbidden in Firefox OS apps (CSP restrictions),
          so we use a script file. -->
@@ -20,7 +15,13 @@
 
   <body>
     <!-- This code is in the public domain. Enjoy! -->
-    <h1>Hello World</h1>
+    <h1>Drawing App</h1>
+    <h5>Click canvas to start drawing, and click agian to stop.</h2>
+    <canvas id="canvas"></canvas>
+    <table>
+        <td><label id="test">a</label></td>
+        <td><button id="clear">clear</button></td>
+    </table>
   </body>
 
 </html>
