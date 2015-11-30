@@ -1,12 +1,23 @@
 body {
   border: 1px solid black;
+  width: 300;
+  height: 510;
+}
+
+input {
+  width: 35;
+}
+
+#colorcanvas {
+  width: 10;
+  height: 10;
 }
 
 #canvas {
   width: 290;
   height: 350;
   padding: 0;
-  margin: auto;
+  margin: 4;
   display: block;
   border: 1px solid #000000;
 }
