@@ -24,6 +24,7 @@ var drawCanvas = (function() {
   // init value here
   var curColor = "#000000";
   var curSize = 2;
+  var mode = "draw";
   
   // once canvas is clicked -> record every position into array
   function addClick(x, y, drag){
@@ -31,9 +32,15 @@ var drawCanvas = (function() {
     clickY.push(y);
     clickDrag.push(drag);
     
-    color.push(curColor);
+    if(mode == "draw"){
+      color.push(curColor);
+    }
+    else if(mode == "eraser"){
+      color.push("white");
+    }
     size.push(curSize);
   }
+  
   // reset canvas
   function clearCanvas(){
     context.clearRect(0, 0, context.canvas.width, context.canvas.height);
@@ -46,9 +53,11 @@ var drawCanvas = (function() {
         
     for(var i=0; i<clickX.length; i++){
       context.beginPath();
+      // for drag line
       if(clickDrag[i] && i){
         context.moveTo(clickX[i-1], clickY[i-1]);
       }
+      // for single click
       else{
         context.moveTo(clickX[i]-1, clickY[i]);
       }
@@ -117,6 +126,31 @@ var drawCanvas = (function() {
     color.push(curColor);
   }
   
+  function saveAndSend(blob){
+     var pictures = navigator.getDeviceStorage("pictures");
+     var request = pictures.addNamed(blob, "image/mycanvas.png");
+
+     //could just share the blob instead of saving
+     request.onsuccess = function () {
+         var sharingImage = new MozActivity({
+             name: "share",
+             data: {
+                 type: "image/*",
+                 number: 1,
+                 blobs: [blob],
+                 filenames: ["mycanvas.png"],
+                 filepaths: ["image/mycanvas.png"]
+             }
+         });
+     }
+
+     // An error could occur if a file with the same name already exist
+     request.onerror = function () {
+         alert('Unable to write the file: ' + this.error.name);
+     }
+
+ }
+  
   var self = function() {
     paint = false;
   };
@@ -128,6 +162,8 @@ var drawCanvas = (function() {
       this.mouseEvent();
       this.changeColor();
       this.changeSize();
+      this.changeMode();
+      this.saveImage();
     },
     
     changeColor: function(){
@@ -150,6 +186,56 @@ var drawCanvas = (function() {
       }
     },
     
+    changeMode: function(){
+      document.getElementById("drawmode").addEventListener('click', function(event){
+        mode = "draw";
+        document.getElementById("mode").innerHTML = "Draw";
+      });
+      
+      document.getElementById("erasermode").addEventListener('click', function(event){
+        mode = "eraser";
+        document.getElementById("mode").innerHTML = "Eraser";
+      });
+    },
+    
+    saveImage: function(){
+      document.getElementById("save").addEventListener('click', function(){
+        /*
+        var imgName = prompt("Enter image name", "example");
+        
+        document.getElementById("img").src = canvas.toDataURL('image/jpeg');
+        console.log("saved");
+        */
+        var pictures = navigator.getDeviceStorage('pictures');
+
+        var request = pictures.usedSpace();
+
+        request.onsuccess = function () {
+          // The result is express in bytes, lets turn it into megabytes
+          var size = this.result / 1000000;
+
+          console.log("The videos on your device use a total of " + size.toFixed(2) + "Mo of space.");
+        }
+
+        request.onerror = function () {
+          console.warn("Unable to get the space used by videos: " + this.error);
+        }
+        
+         canvas.toBlob(function (blob) {
+           //var sdcard = navigator.getDeviceStorage("pictures");
+           var sdcard = navigator.getDeviceStorage("sdcard");
+           var request = sdcard.delete("test/mycanvas.png");
+           //try to delete in case it exists
+           request.onsuccess = function () {
+               saveAndSend(blob);
+           }
+           request.onerror = function () {
+               saveAndSend(blob);
+           }
+         });
+      });
+    },
+    
     mouseEvent: function(e){
       this.touchStart();
       this.touchEnd();
@@ -164,6 +250,9 @@ var drawCanvas = (function() {
         
         var touchX = event.changedTouches[0].pageX - this.offsetLeft;
         var touchY = event.changedTouches[0].pageY - this.offsetTop;
+        
+      //  console.log((event.changedTouches[0].pageX - this.offsetLeft) + " " + (event.changedTouches[0].pageY - this.offsetTop));
+      //  console.log((event.changedTouches[0].screenX - this.offsetLeft) + " " + (event.changedTouches[0].screenY - this.offsetTop));
         
         paint = true;
         addClick(touchX, parseInt(touchY/convertSz));

@@ -11,5 +11,11 @@
   "developer": {
     "name": "Peter",
     "url": "http://example.com"
+  },
+  "permissions": {
+    "device-storage:sdcard":{ "access": "readwrite" },
+    "device-storage:apps":{ "access": "readwrite" },
+    "device-storage:videos":{ "access": "readonly" },
+    "device-storage:pictures":{ "access": "readwrite" }
   }
 }

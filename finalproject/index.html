@@ -21,8 +21,6 @@
     <div>
       <div>
         <button id="clear">Clear</button>
-        <label id="showcolor">Color</label>
-        <canvas id="colorcanvas"></canvas>
       </div>
       <div>
         <h7>Red</h7>
@@ -31,6 +29,8 @@
         <input id="color2" value="0">
         <h7>Blue</h7>
         <input id="color3" value="0">
+        <h7>Color</h7>
+        <canvas id="colorcanvas"></canvas>
       </div>
       <div>
         <h7>Size</h7>
@@ -38,6 +38,17 @@
         <button id="size2" value="2">Medium</button>
         <button id="size3" value="3">Large</button>
         <button id="size4" value="5">Huge</button>
+      </div>
+      <div>
+        <h7>Mode</h7>
+        <button id="drawmode">Draw</button>
+        <button id="erasermode">Eraser</button>
+        <label id="mode">Mode</label>
+      </div>
+      <div>
+        <h7>Save Image</h7>
+        <button id="save">Save</button>
+        <img id="img" />
       </div>
     </div>
   </body>
