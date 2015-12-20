@@ -246,7 +246,6 @@ var drawCanvas = (function() {
     
     touchStart: function(){
       canvas.addEventListener('touchstart', function(event){
-        document.getElementById("test").innerHTML = "touchstart";
         
         var touchX = event.changedTouches[0].pageX - this.offsetLeft;
         var touchY = event.changedTouches[0].pageY - this.offsetTop;
@@ -262,16 +261,12 @@ var drawCanvas = (function() {
     
     touchEnd: function(){
       canvas.addEventListener('touchend', function(event){
-        document.getElementById("test").innerHTML = "touchend";
-        
         paint = false;
       });
     },
     
     touchMove: function(){
       canvas.addEventListener('touchmove', function(event){
-        document.getElementById("test").innerHTML = "touchmove";
-        
         for (var i=0; i < event.changedTouches.length; i++) {
           if(paint){
             addClick(event.changedTouches[i].pageX - this.offsetLeft, parseInt((event.changedTouches[i].pageY - this.offsetTop)/convertSz), true);
@@ -284,8 +279,6 @@ var drawCanvas = (function() {
     
     touchLeave: function(){
       canvas.addEventListener('touchleave', function(event){
-        document.getElementById("test").innerHTML = "touchleave";
-        
         paint = false;
       });
     },
